@@ -27,7 +27,7 @@ gpu4: $(OBJ4)
 	$(NVCC) $? $(LIB)
 save:
 	$(RM) *.o *.out
-	tar zcvf ../gpu_gems.tgz ../gpu_gems
+	tar zcvf ../gemsfmm.tgz ../gemsfmm
 
 .cpp.o:
 	$(NVCC) -c $< -o $@
