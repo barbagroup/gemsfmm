@@ -1,12 +1,12 @@
 .SUFFIXES: .cpp .cu .o
 
-NVCC = nvcc --ptxas-options=-v --host-compilation 'C++' -Xcompiler "-march=core2" -Xcompiler "-m64" -Xcompiler "-O3" -Xcompiler "-ffast-math" --machine 64 -O3 -use_fast_math -I. -I$(CUDA_INSTALL_PATH)/include -I$(SDK_INSTALL_PATH)/common/inc
+NVCC = nvcc --ptxas-options=-v --host-compilation 'C++' -Xcompiler "-O3" -Xcompiler "-ffast-math" -O3 -use_fast_math -I. -I$(CUDA_INSTALL_PATH)/include -I$(SDK_INSTALL_PATH)/common/inc
 
 OBJ1 = test.o fmm.o cpukernel.o
 OBJ2 = test.o fmm.o ssekernel.o
 OBJ3 = test.o fmm.o gpukernel_p3.o
 OBJ4 = test.o fmm.o gpukernel_p4.o
-LIB = -L$(CUDA_INSTALL_PATH)/lib64 -L$(SDK_INSTALL_PATH)/lib -lcudart -lGL -lGLU -lcutil -lstdc++ 
+LIB = -L$(CUDA_INSTALL_PATH)/lib64 -L$(SDK_INSTALL_PATH)/lib -lcudart -lcutil -lstdc++ 
 
 all:
 	make cpu1

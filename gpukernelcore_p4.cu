@@ -348,14 +348,15 @@ __device__ void m2l_calculate_ynm(float* sharedYnm,
 }
 
 __device__ void m2l_kernel_core(float* LnmTarget,
-                                int j, float beta,
+                                float beta,
                                 float* sharedFactorial,
                                 float* sharedYnm,
                                 float* sharedMnmSource)
 {
-  int i, k, m, n, jnkm;
+  int i, j, k, m, n, jnkm;
   float ere, eim, anm, ajk, cnm, CnmReal, CnmImag;
-  k = 0;
+  j = floor(sqrt(2*threadIdx.x+0.25)-0.5);
+  k = 0; 
   for(i = 0; i <= j; i++) k += i;
   k = threadIdx.x - k;
   ajk = ODDEVEN(j) * rsqrtf(sharedFactorial[j - k] * sharedFactorial[j + k]);
@@ -395,27 +396,17 @@ __device__ void m2l_kernel_core(float* LnmTarget,
 __global__ void m2l_kernel(int* deviceOffset, float* deviceLnmTarget,
                            float* deviceMnmSource)
 {
-  int i, j, k, ij, ib, numInteraction, jbase;
+  int i, ij, ib, numInteraction, jbase;
   const int threadsPerBlock = threadsPerBlockTypeB;
   const int offsetStride = 4*maxM2LInteraction+1;
   float3 dist;
   float boxSize = deviceConstant[0];
   float rho, alpha, beta, fact;
   float LnmTarget[2] = {0.0f, 0.0f};
-  __shared__ int sharedJ[threadsPerBlock];
   __shared__ float sharedMnmSource[2 * threadsPerBlock];
   __shared__ float sharedYnm[numCoefficients];
   __shared__ float sharedFactorial[2 * numExpansions];
   numInteraction = deviceOffset[blockIdx.x * offsetStride];
-  for(i = 0; i < threadsPerBlock; i++){
-    sharedJ[i] = 0;
-  }
-  for(j = 0; j < numExpansions; j++){
-    for(k = 0; k <= j; k++){
-      i = j * (j + 1) / 2 + k;
-      sharedJ[i] = j;
-    }
-  }
   fact = 1.0;
   for(i = 0; i < 2 * numExpansions; i++) {
     sharedFactorial[i] = fact;
@@ -431,8 +422,7 @@ __global__ void m2l_kernel(int* deviceOffset, float* deviceLnmTarget,
     __syncthreads();
     cart2sph(rho, alpha, beta, dist.x, dist.y, dist.z);
     m2l_calculate_ynm(sharedYnm, rho, alpha, sharedFactorial);
-    m2l_kernel_core(LnmTarget, sharedJ[threadIdx.x], beta,
-                    sharedFactorial, sharedYnm, sharedMnmSource);
+    m2l_kernel_core(LnmTarget, beta, sharedFactorial, sharedYnm, sharedMnmSource);
     __syncthreads();
   }
   ib = blockIdx.x * threadsPerBlock + threadIdx.x;

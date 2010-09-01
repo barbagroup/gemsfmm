@@ -1,0 +1,85 @@
+This is a simple FMM code on GPUs
+
+by Rio Yokota   rioyokota@gmail.com
+   June 2010
+
+Reference : GPU Gems Vol.4 "Treecode and fast multipole method for N-body simulation with CUDA"
+
+
+1. How to run the code
+
+Set the following environment values first
+CUDA_INSTALL_PATH
+SDK_INSTALL_PATH
+
+To run the unoptimized CPU code do
+make cpu1
+./a.out
+
+To run the highly tuned CPU code do (This won't run on 32 bit machines)
+make cpu2
+./a.out
+
+To run the GPU code with p^3 translation do
+make gpu3
+./a.out
+
+To run the GPU code with p^4 translation do
+make gpu4
+./a.out
+
+
+2. What the demo is actual calculating
+
+The demo code for all four runs cpu1, cpu2, gpu3, gpu4 run the same example,
+the calculation of the acceleration for a many body problem using randomly distributed points 
+in a [-pi,pi]^3 box with random positive masses.
+It has a loop that calculates for different number of particles, N=10,000 to N=10,000,000.
+It does both the FMM and direct calculation and compares the L2 norm of the acceleration of all particles.
+It outputs the runtime for the FMM and direct calculation and also the L2 norm error for each N.
+See GPU Gems Vol.4 "Treecode and fast multipole method for N-body simulation with CUDA"
+for more details.
+
+
+3. FAQ
+
+Q. I can't get cpu2 to compile
+A. cpu2 works only on 64 bit machines
+
+Q. I get a compile error like "error: more than one instance of overloaded function "__isinf" has "C" linkage"
+A. Please use g++-4.3 (not 4.4) and nvcc 3.1
+
+Q. I changed maxParticles and the program crashes
+A. maxParticles is used to set the size of the arrays, please adjust them according to the size of your problem
+
+
+4. Organazation of files
+
+constants.h         : Contains global constants for array sizes and thread block sizes
+                      included from kernel.h
+
+cpukernel.cpp       : FMM kernels for the unoptimized CPU run
+
+fmm.cpp             : Routines for tree structure and interaction lists
+
+fmm.h               : Contains global variables, decleration of FmmSystem class used in fmm.cpp
+                      included from cpukernel.cpp, ssekernel.cpp, gpukernel_p3.cu, gpukernel_p4.cu
+
+gpukernelcore_p3.cu : FMM CUDA kernels for p^3 translation
+
+gpukernelcore_p4.cu : FMM CUDA kernels for p^4 translation
+
+gpukernel_p3.cu     : FMM CUDA wrapper for p^3 translation
+
+gpukernel_p4.cu     : FMM CUDA wrapper for p^4 translation
+
+kernel.h            : Declaration of FmmKernel class used in 
+                      cpukernel.cpp, ssekernel.cpp, gpukernel_p3.cu, gpukernel_p4.cu
+                      included from fmm.h
+
+sse.h               : inline assembly instructions and kernels
+                      included from ssekernel.cpp
+
+ssekernel.cpp       : FMM kernels for the highly tuned CPU code
+
+test.cpp            : Main driver program
