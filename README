@@ -12,21 +12,23 @@ Set the following environment values first
 CUDA_INSTALL_PATH
 SDK_INSTALL_PATH
 
-To run the unoptimized CPU code do
+To run the unoptimized FMM on CPU code do
 make cpu1
 ./a.out
 
-To run the highly tuned CPU code do (This won't run on 32 bit machines)
+To run the highly tuned FMM on CPU code do (This won't run on 32 bit machines)
 make cpu2
 ./a.out
 
-To run the GPU code with p^3 translation do
+To run the FMM on GPU code with p^3 translation do
 make gpu3
 ./a.out
 
-To run the GPU code with p^4 translation do
+To run the FMM on GPU code with p^4 translation do
 make gpu4
 ./a.out
+
+To run the treecode change treeOrFMM to 0 in test.cpp
 
 
 2. What the demo is actual calculating

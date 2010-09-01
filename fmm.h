@@ -49,6 +49,12 @@ std::complex<double> (*LnmOld)[numCoefficients]; // Lnm from previous level
 std::complex<double> (*Mnm)[numCoefficients];    // multipole expansion coefficnets
 std::complex<double> *Ynm;                       // spherical harmonic
 std::complex<double> ***Dnm;                     // Wigner rotation matrix
+double get_time(void) {                          // a simple timer
+  struct timeval tv;
+  struct timezone tz;
+  gettimeofday(&tv, &tz);
+  return ((double)(tv.tv_sec+tv.tv_usec*1.0e-6));
+}
 double tic,t[9];                                 // event timer counter
 void log_time(int stage) {                       // event timer
   struct timeval tv;
@@ -87,6 +93,7 @@ extern std::complex<double> (*Lnm)[numCoefficients];
 extern std::complex<double> (*LnmOld)[numCoefficients];
 extern std::complex<double> (*Mnm)[numCoefficients],*Ynm,***Dnm;
 extern double tic,t[9];
+extern void get_time(int);
 extern void log_time(int);
 #endif
 

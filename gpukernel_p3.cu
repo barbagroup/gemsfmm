@@ -651,11 +651,11 @@ void FmmKernel::p2p(int numBoxIndex) {
   t[0]+=tic-toc;
   for(i=0;i<9;i++) t[9]+=t[i];
   flops=op*((double)nflop)/t[9];
-  printf("p2p cudaMalloc : %f s\n",t[1]);
-  printf("p2p cudaMemcpy : %f s\n",t[2]);
-  printf("p2p cudaKernel : %f s\n",t[3]);
-  printf("p2p other      : %f s\n",t[0]);
-  printf("p2p flops      : %f G\n",flops/1e9);
+//  printf("p2p cudaMalloc : %f s\n",t[1]);
+//  printf("p2p cudaMemcpy : %f s\n",t[2]);
+//  printf("p2p cudaKernel : %f s\n",t[3]);
+//  printf("p2p other      : %f s\n",t[0]);
+//  printf("p2p flops      : %f G\n",flops/1e9);
   tic=flops;
 }
 
@@ -1240,11 +1240,11 @@ void FmmKernel::m2l(int numBoxIndex, int numLevel) {
   t[0]+=tic-toc;
   for(i=0;i<9;i++) t[9]+=t[i];
   flops=op*((double)nflop)/t[9];
-  printf("m2l cudaMalloc : %f s\n",t[1]);
-  printf("m2l cudaMemcpy : %f s\n",t[2]);
-  printf("m2l cudaKernel : %f s\n",t[3]);
-  printf("m2l other      : %f s\n",t[0]);
-  printf("m2l flops      : %f G\n",flops/1e9);
+//  printf("m2l cudaMalloc : %f s\n",t[1]);
+//  printf("m2l cudaMemcpy : %f s\n",t[2]);
+//  printf("m2l cudaKernel : %f s\n",t[3]);
+//  printf("m2l other      : %f s\n",t[0]);
+//  printf("m2l flops      : %f G\n",flops/1e9);
   tic=flops;
 }
 
@@ -1895,10 +1895,10 @@ void FmmKernel::m2p(int numBoxIndex, int numLevel) {
   t[0]+=tic-toc;
   for(i=0;i<9;i++) t[9]+=t[i];
   flops=op*((double)nflop)/t[9];
-  printf("m2p cudaMalloc : %f s\n",t[1]);
-  printf("m2p cudaMemcpy : %f s\n",t[2]);
-  printf("m2p cudaKernel : %f s\n",t[3]);
-  printf("m2p other      : %f s\n",t[0]);
-  printf("m2p flops      : %f G\n",flops/1e9);
+//  printf("m2p cudaMalloc : %f s\n",t[1]);
+//  printf("m2p cudaMemcpy : %f s\n",t[2]);
+//  printf("m2p cudaKernel : %f s\n",t[3]);
+//  printf("m2p other      : %f s\n",t[0]);
+//  printf("m2p flops      : %f G\n",flops/1e9);
   tic=flops;
 }

@@ -10,6 +10,7 @@
 #include <iostream>
 #include <sys/time.h>
 
+const int maxParticles         = 10000000;   // max of particles
 const int numExpansions        = 10;         // order of expansion in FMM
 const int maxP2PInteraction    = 27;         // max of P2P interacting boxes
 const int maxM2LInteraction    = 189;        // max of M2L interacting boxes

@@ -2,14 +2,7 @@
 #include "fmm.h"
 #undef MAIN
 
-const int maxParticles = 10000000;
-
-double get_time(void) {
-  struct timeval tv;
-  struct timezone tz;
-  gettimeofday(&tv, &tz);
-  return ((double)(tv.tv_sec+tv.tv_usec*1.0e-6));
-}
+const int treeOrFMM = 1; // 0 : tree, 1: FMM 
 
 int main(int argc, char *argv[]){
   int i,iteration,numParticles;
@@ -35,7 +28,7 @@ int main(int argc, char *argv[]){
     printf("N = %d\n",numParticles);
 
     tic = get_time();
-    tree.fmmMain(numParticles,1);
+    tree.fmmMain(numParticles,treeOrFMM);
     toc = get_time();
     timeFMM = toc-tic;
     printf("fmm    : %g\n",timeFMM);
