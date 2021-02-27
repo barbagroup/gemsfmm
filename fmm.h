@@ -2,6 +2,17 @@
 #define __FMM_H__
 
 #include "kernel.h"
+#include "cuda_runtime.h"
+
+#define CUDA_SAFE_CALL(call) call
+
+#define cudaCheckError() { \
+  cudaError_t e=cudaGetLastError(); \
+  if(e!=cudaSuccess) { \
+    printf("Cuda failure %s:%d: '%s'\n",__FILE__,__LINE__,cudaGetErrorString(e)); \
+    exit(0); \
+  } \
+}
 
 template<typename T>
 class vec3 {
@@ -117,4 +128,5 @@ public:
   void getInteractionList(int numBoxIndex, int numLevel, int interactionType);
   void fmmMain(int numParticles, int treeOrFMM);
 };
+
 #endif // __FMM_H__
