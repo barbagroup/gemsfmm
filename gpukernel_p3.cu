@@ -1,5 +1,4 @@
 #include "fmm.h"
-#include <cutil.h>
 
 unsigned int hostOffsetSize;
 unsigned int hostAccelSize;
@@ -56,7 +55,7 @@ double get_gpu_time(void)
 {
   struct timeval tv;
   struct timezone tz;
-  if (is_set==1) cudaThreadSynchronize();
+  if (is_set==1) cudaDeviceSynchronize();
   gettimeofday(&tv, &tz);
   return ((double)(tv.tv_sec+tv.tv_usec*1.0e-6));
 }
@@ -180,7 +179,7 @@ void FmmKernel::direct(int n) {
       dim3 block(threadsPerBlockTypeA);
       dim3 grid(iblok);
       p2p_kernel<<< grid, block >>>(deviceOffset,devicePosTarget,devicePosSource,deviceAccel);
-      CUT_CHECK_ERROR("Kernel execution failed");
+      cudaCheckError();
       nflop = 19;
 
       toc=tic;
@@ -603,7 +602,7 @@ void FmmKernel::p2p(int numBoxIndex) {
         dim3 block(threadsPerBlockTypeA);
         dim3 grid(iblok);
         p2p_kernel<<< grid, block >>>(deviceOffset,devicePosTarget,devicePosSource,deviceAccel);
-        CUT_CHECK_ERROR("Kernel execution failed");
+        cudaCheckError();
         nflop = 19;
 
         toc=tic;
@@ -760,7 +759,7 @@ void FmmKernel::p2m(int numBoxIndex) {
     dim3 block(threadsPerBlockTypeB);
     dim3 grid(iblok);
     p2m_kernel<<< grid, block >>>(deviceOffset,deviceMnmTarget,devicePosSource);
-    CUT_CHECK_ERROR("Kernel execution failed");
+    cudaCheckError();
     nflop = 20;
 
     toc=tic;
@@ -952,7 +951,7 @@ void FmmKernel::m2m(int numBoxIndex, int numBoxIndexOld, int numLevel) {
     dim3 block(threadsPerBlockTypeB);
     dim3 grid(iblok);
     m2m_kernel<<< grid, block >>>(deviceOffset,deviceMnmTarget,deviceMnmSource,deviceYnm,deviceDnm);
-    CUT_CHECK_ERROR("Kernel execution failed");
+    cudaCheckError();
     nflop = 48;
 
     toc=tic;
@@ -1195,7 +1194,7 @@ void FmmKernel::m2l(int numBoxIndex, int numLevel) {
     dim3 block(threadsPerBlockTypeB);
     dim3 grid(iblok);
     m2l_kernel<<< grid, block >>>(deviceOffset,deviceLnmTarget,deviceMnmSource,deviceYnm,deviceDnm);
-    CUT_CHECK_ERROR("Kernel execution failed");
+    cudaCheckError();
     nflop = 48;
 
     toc=tic;
@@ -1417,7 +1416,7 @@ void FmmKernel::l2l(int numBoxIndex, int numLevel) {
     dim3 block(threadsPerBlockTypeB);
     dim3 grid(iblok);
     l2l_kernel<<< grid, block >>>(deviceOffset,deviceLnmTarget,deviceLnmSource,deviceYnm,deviceDnm);
-    CUT_CHECK_ERROR("Kernel execution failed");
+    cudaCheckError();
     nflop = 48;
 
     toc=tic;
@@ -1587,7 +1586,7 @@ void FmmKernel::l2p(int numBoxIndex) {
     dim3 block(threadsPerBlockTypeB);
     dim3 grid(iblok);
     l2p_kernel<<< grid, block >>>(deviceOffset,devicePosTarget,deviceLnmSource,deviceAccel);
-    CUT_CHECK_ERROR("Kernel execution failed");
+    cudaCheckError();
     nflop = 56;
 
     toc=tic;
@@ -1846,7 +1845,7 @@ void FmmKernel::m2p(int numBoxIndex, int numLevel) {
         dim3 block(threadsPerBlockTypeB);
         dim3 grid(iblok);
         m2p_kernel<<< grid, block >>>(deviceOffset,devicePosTarget,deviceMnmSource,deviceAccel);
-        CUT_CHECK_ERROR("Kernel execution failed");
+        cudaCheckError();
         nflop = 56;
 
         toc=tic;
